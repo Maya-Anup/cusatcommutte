@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:carpooling_app/authentication/login_screen.dart';
 import 'package:carpooling_app/authentication/signup_screen.dart';
 import 'package:carpooling_app/mainScreen/main_screen.dart';
+import 'package:carpooling_app/splashScreen/user_selection.dart';
 import 'package:flutter/material.dart';
 
 import '../global/global.dart';
@@ -26,7 +27,8 @@ class _MySplashScreenState extends State<MySplashScreen> {
       //   Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreen()));
       // }
       //send user to home screen
-      Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreen()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (c) => const UserSelection()));
     }); //Timer
   }
 
