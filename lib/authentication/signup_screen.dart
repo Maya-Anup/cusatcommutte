@@ -1,5 +1,6 @@
 import 'package:carpooling_app/authentication/car_info_screen.dart';
 import 'package:carpooling_app/global/global.dart';
+import 'package:carpooling_app/splashScreen/user_selection.dart';
 import 'package:carpooling_app/widgets/progress_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -80,7 +81,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
       password: passwordTextEditingController.text.trim(),
     )
             .catchError((msg) {
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const UserSelection(),
+          ));
       Fluttertoast.showToast(msg: "Error: " + msg.toString());
     }))
         .user;
@@ -95,7 +100,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       DatabaseReference driversRef =
           FirebaseDatabase.instance.ref().child("drivers");
-      driversRef.child(firebaseUser.uid).set(driverMap);
+      driversRef.child(firebaseUser.uid).set(driverMap).then((_) {
+        print("Data saved successfully!");
+      }).catchError((error) {
+        print("Failed to save data: $error");
+      });
 
       currentFirebaseUser = firebaseUser;
       Fluttertoast.showToast(msg: "Account has been created");
@@ -152,7 +161,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: const EdgeInsets.all(10),
               child: TextField(
                 key: ValueKey("studentID"),
-                controller: emailTextEditingController,
+
                 keyboardType: TextInputType.emailAddress,
                 // validator: EmailFieldValidator.validate,
                 decoration: const InputDecoration(

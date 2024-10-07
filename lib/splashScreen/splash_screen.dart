@@ -5,6 +5,7 @@ import 'package:carpooling_app/authentication/signup_screen.dart';
 import 'package:carpooling_app/mainScreen/main_screen.dart';
 import 'package:carpooling_app/splashScreen/user_selection.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../global/global.dart';
 
@@ -16,7 +17,7 @@ class MySplashScreen extends StatefulWidget {
 }
 
 class _MySplashScreenState extends State<MySplashScreen> {
-  startTimer() {
+  startTimer() async {
     Timer(const Duration(seconds: 4), () async {
       // if (await fAuth.currentUser != null) {
       //
@@ -27,8 +28,15 @@ class _MySplashScreenState extends State<MySplashScreen> {
       //   Navigator.push(context, MaterialPageRoute(builder: (c) => LoginScreen()));
       // }
       //send user to home screen
-      Navigator.push(
-          context, MaterialPageRoute(builder: (c) => const UserSelection()));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      bool? islogged = prefs.getBool('islogged');
+      if (islogged != null && islogged) {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (c) => MainScreen()));
+      } else {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (c) => const UserSelection()));
+      }
     }); //Timer
   }
 
@@ -44,23 +52,45 @@ class _MySplashScreenState extends State<MySplashScreen> {
   Widget build(BuildContext context) {
     return Material(
       child: Container(
-        color: Colors.black,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/background.jpg'),
+                fit: BoxFit.cover)),
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  "images/cusat.png",
-                  height: 100,
-                  width: 100,
-                  scale: 0.9,
-                ),
-                const SizedBox(
-                  height: 0,
-                ),
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.1,
+              ),
+              Image.asset("assets/images/cusat.png",
+                  height: MediaQuery.sizeOf(context).height * 0.2),
+              Text(
+                'CUSAT\nCOMMUTE',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.red[900],
+                    shadows: [
+                      Shadow(
+                          offset: Offset(5, 5),
+                          blurRadius: 15,
+                          color: Colors.black54)
+                    ],
+                    fontFamily: 'OpenSans',
+                    fontWeight: FontWeight.bold,
+                    fontSize: MediaQuery.sizeOf(context).width * 0.09),
+              ),
+              Spacer(
+                flex: 5,
+              ),
+              Text(
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[700]),
+                  'Ride Together, Save Together\nConnecting CUSAT students for easy commutes.'),
+              SizedBox(
+                height: 15,
+              )
+            ],
           ),
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:carpooling_app/splashScreen/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +12,7 @@ void main() async {
         child: MaterialApp(
       title: 'Car Pooling',
       theme: ThemeData(
+        fontFamily: 'OpenSans',
         primarySwatch: Colors.blue,
       ),
       home: const MySplashScreen(),
